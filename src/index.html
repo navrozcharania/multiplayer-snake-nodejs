@@ -1,18 +1,22 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO Snake Multiplayer</title>
+    <title>Snake Game</title>
     <style>
       * { margin: 0; padding: 0; }
-      body { font: 24px Helvetica, Arial; }
+      body { font: 29px; }
       #scores { float: right; padding-top: 16px; padding-right: 16px; }
     </style>
   </head>
-  <body>
+  <body> 
+    <b>Use Direction keys to Navigate.</b>
+    <br>
     <div id="scores">
       <div id="own">
-        Nickname: <input type="text" id="nickname" />
-        <input type="button" id="auth" value="Play!" />
+        
+        Enter a player name and click 'Start Playing' to begin <br>
+        Name: <input type="text" id="nickname"  />
+        <input type="button" id="auth" value="Start Playing!" />
       </div>
       <hr />
       <div id="others">
@@ -32,20 +36,25 @@
           this.canvas = canvas;
           this.canvas.width = this.canvas.height = ratio;
           this.context = this.canvas.getContext('2d');
-          this.gridSize = 40;
+          this.gridSize = 35;
           this.cellSize = ratio / this.gridSize;
         }
+        var grid;
 
         /*
           Render game canvas & draw players, apples & scores
         */
+       
         GameCanvas.prototype.draw = function(players, apples) {
+          var invert=false;
           var context = this.context;
           var cellSize = this.cellSize;
+          var colorOptions = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#808080']
 
           // Render background
-          this.context.fillStyle = "#555";
+          this.context.fillStyle = "#009f6b";
           this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+          grid = zeros([35,35])
 
           // Reset other
           $('#others').text('');
@@ -56,7 +65,7 @@
             // scores
             if(p.id === playerId) {
               $('#own')
-                .text(p.nickname + ' score: ' + p.points)
+                .text( p.nickname + '\'s score : ' + p.points)
                 .append($('<br>'));
             } else {
               $('#others')
@@ -67,13 +76,26 @@
 
             // players
             if(p.id === playerId) {
-              context.fillStyle = "#fff";
+              context.fillStyle = "#f5f5f5";
+              grid[p.x][p.y]=p.tail.length+1
+              //console.log(p.tail.length)
+              j=1
+              p.tail.forEach((t) => {
+              grid[t.x][t.y]==j++;
+            });
             } else {
-              context.fillStyle = "#4286f4";
-            }
-            context.fillRect(p.x*cellSize, p.y*cellSize, cellSize, cellSize);
+              context.fillStyle = "#ff0000"
 
-            // tails
+              grid[p.x][p.y]=-2
+              p.tail.forEach((t) => {
+              grid[t.x][t.y]==-2;
+            });
+            }
+            //fill head elem
+            context.fillRect(p.x*cellSize, p.y*cellSize, cellSize, cellSize);
+            
+
+            // fill tails
             p.tail.forEach((t) => {
               context.fillRect(t.x*cellSize, t.y*cellSize, cellSize, cellSize);
             });
@@ -81,9 +103,11 @@
 
           // Render apples
           apples.forEach((a) => {
-            context.fillStyle = "#ff0000";
+            context.fillStyle = colorOptions[Math.random() * 17 | 0] ;
             context.fillRect(a.x*cellSize, a.y*cellSize, cellSize, cellSize);
+            grid[a.x][a.y]=-1
           });
+          //renderGrid(grid)
         }
 
         return GameCanvas;
@@ -105,19 +129,28 @@
             playerId = session.id;
             console.log('new session: ' + playerId);
           });
+          document.body.appendChild(canvas);
+      
+
         }
       });
 
-      // Create & insert canvas
-      var canvas = document.createElement("canvas");
-      document.body.appendChild(canvas);
+          // Create & insert canvas
+          var canvas = document.createElement("canvas");
+      
 
       // Create game with canvas
       var game = new GameCanvas(canvas);
-
       // Send keystrokes
       document.onkeydown = (ev) => {
+        console.log(ev.keyCode);
         socket.emit('key', ev.keyCode);
+        if (ev.keyCode===68){
+          //run invert functions
+          invertView()
+          console.log(grid);
+        }
+        //console.log(ev.keyCode)
       }
 
       // Receive state from server
@@ -125,6 +158,28 @@
         // and redraw the game
         game.draw(stuff.players, stuff.apples);
       });
+      //Function for inverting the canvas this will essentially happen on pressing d
+      function invertView(){
+      
+      
+        //make properites as invert with apple
+        //make properites as invert with snakes
+        //make grid show 0's
+      
+
+      }
+      function zeros(dimensions) {
+    var array = [];
+
+    for (var i = 0; i < dimensions[0]; ++i) {
+        array.push(dimensions.length == 1 ? 0 : zeros(dimensions.slice(1)));
+        //console.log(array)
+    }
+    
+
+    return array;
+}
+
 
     </script>
   </body>

@@ -1,19 +1,11 @@
-# What is this?
+Program to start up a server and host for snake game
 
-A simple Multiplayer Snake game for learning Socket.IO
+How to run?
+node src/index.js # this starts a local server
 
-# Demo
+hit localhost:3000/ # to start the web application
 
-https://nondescript-dog.gomix.me/
+How to play?
+Once you have filled in the name and hit start play, you need to use the direction keys to move the snake around.
 
-![](https://pbs.twimg.com/media/C0EoskTUsAADtxW.png:small)
 
-# References
-
-First (local) version: https://jsbin.com/lapose/edit?js,output
-
-Based on ideas from: http://agar.io/
-
-As featured in: https://gomix.com/community/games
-
-![](https://pbs.twimg.com/media/C0ACuL0UQAAQHM9.jpg:small)

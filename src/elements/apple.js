@@ -1,11 +1,9 @@
-// Use ES6
+
 "use strict";
 
 const _ = require('lodash');
 
-/*
- * Apple class
- */
+//Apple
 class Apple {
   constructor(options) {
     _.assign(this, options);
