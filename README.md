@@ -7,5 +7,4 @@ hit localhost:3000/ # to start the web application
 
 How to play?
 Once you have filled in the name and hit start play, you need to use the direction keys to move the snake around.
-
-#please note this is a modification to involve many changes and personalizations and has been sourced from https://github.com/benoror/snake-mp-socketio, please credit the original source for appreciations and licenses.
+.
